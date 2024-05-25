@@ -42,6 +42,9 @@ public class Usuario implements UserDetails {
 	public String getUsername() {
 		return login;
 	}
+	public long getId() {
+		return id;
+	}
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

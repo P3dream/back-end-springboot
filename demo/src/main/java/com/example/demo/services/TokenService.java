@@ -21,10 +21,9 @@ public class TokenService {
 	
 	public String gerarToken(Usuario usuario) {
 		try {
-			System.out.println("gerar token");
 		    var algorithm = Algorithm.HMAC256(secret);
 		     return JWT.create()
-		        .withIssuer("Remedios_api")
+		        .withIssuer("Mensagens_api")
 		        .withSubject(usuario.getLogin())
 		        .withExpiresAt(dataExpiracao())
 		        .sign(algorithm);
@@ -37,7 +36,7 @@ public class TokenService {
 		try {
 			var algorithm = Algorithm.HMAC256(secret);
 			return JWT.require(algorithm)
-					.withIssuer("Remedios_api")
+					.withIssuer("Mensagens_api")
 					.build()
 					.verify(TokenJWT)
 					.getSubject();

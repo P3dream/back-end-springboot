@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.configuration;
 
 import java.io.IOException;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.demo.repositorio.UsuarioRepositorio;
+import com.example.demo.services.TokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,23 +28,18 @@ public class SecurityFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		System.out.println("teste");
 		
 		var tokenJWT = recuperarToken(request);
-		System.out.println(tokenJWT); // o token aqui é nulo, entaão ele não entra no if
 		if(tokenJWT!=null) {
 			var subject = tokenService.getSubject(tokenJWT);
 			var usuario = usuarioRepositorio.findByLogin(subject);
-			System.out.println(usuario);
-			
 			var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 			
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
 		}
 		
-		
-		filterChain.doFilter(request, response); // em seguida ele chama esse método que eu não sei o que faz
+		filterChain.doFilter(request, response);
 		
 	}
 
