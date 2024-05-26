@@ -13,6 +13,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("API de Autenticação")
                         .version("1.0")
-                        .description("Documentação da API de Autenticação com Springdoc OpenAPI"));
+                        .description("Documentação dos endpoints do back-end do projeto de sistemas distribuidos."));
     }
 }

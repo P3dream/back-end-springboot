@@ -7,5 +7,6 @@ import com.example.demo.model.Usuario;
 public interface UsuarioRepositorio extends JpaRepository<Usuario, Long>{
 
 	Usuario findByLogin(String login);
+
 	List<Usuario> findByIsonlineTrue();
 }

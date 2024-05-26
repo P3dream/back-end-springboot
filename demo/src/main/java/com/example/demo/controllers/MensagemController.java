@@ -1,44 +1,29 @@
 package com.example.demo.controllers;
 
+import com.example.demo.model.CadastroMensagem;
 import com.example.demo.model.Mensagem;
-import com.example.demo.repositorio.MensagemRepositorio;
+import com.example.demo.services.MensagemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/mensagens")
 public class MensagemController {
 
     @Autowired
-    private MensagemRepositorio mensagemRepositorio;
+    private MensagemService mensagemService;
 
     @GetMapping
     @Operation(summary = "Obter todas as mensagens")
     public List<Mensagem> getAllMensagens() {
-        return mensagemRepositorio.findAll();
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Obter uma mensagem pelo ID")
-    @ApiResponse(responseCode = "200", description = "Mensagem encontrada", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = Mensagem.class)),
-            @Content(mediaType = "application/xml", schema = @Schema(implementation = Mensagem.class))
-    })
-    @ApiResponse(responseCode = "404", description = "Mensagem não encontrada")
-    public ResponseEntity<Mensagem> getMensagemById(@Parameter(description = "ID da mensagem") @PathVariable Long id) {
-        Optional<Mensagem> mensagem = mensagemRepositorio.findById(id);
-        return mensagem.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return mensagemService.getAllMensagens();
     }
 
     @PostMapping
@@ -47,45 +32,17 @@ public class MensagemController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = Mensagem.class)),
             @Content(mediaType = "application/xml", schema = @Schema(implementation = Mensagem.class))
     })
-    public Mensagem createMensagem(@RequestBody Mensagem mensagem) {
-        return mensagemRepositorio.save(mensagem);
+    public Mensagem createMensagem(@RequestBody CadastroMensagem dto) {
+        return mensagemService.createMensagem(dto);
     }
-
-    @PutMapping("/{id}")
-    @Operation(summary = "Atualizar uma mensagem pelo ID")
-    @ApiResponse(responseCode = "200", description = "Mensagem atualizada com sucesso", content = {
+    
+    @GetMapping("/{usuarioId}")
+    @Operation(summary = "Buscar todas as mensagens enviadas ou recebidas por um usuário")
+    @ApiResponse(responseCode = "200", description = "Mensagens encontradas com sucesso", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = Mensagem.class)),
             @Content(mediaType = "application/xml", schema = @Schema(implementation = Mensagem.class))
     })
-    @ApiResponse(responseCode = "404", description = "Mensagem não encontrada")
-    public ResponseEntity<Mensagem> updateMensagem(@Parameter(description = "ID da mensagem") @PathVariable Long id,
-                                                    @RequestBody Mensagem mensagemDetails) {
-        Optional<Mensagem> mensagemOptional = mensagemRepositorio.findById(id);
-
-        if (mensagemOptional.isPresent()) {
-            Mensagem mensagem = mensagemOptional.get();
-            mensagem.setEmissor(mensagemDetails.getEmissor());
-            mensagem.setDestinatario(mensagemDetails.getDestinatario());
-            mensagem.setDataEnvio(mensagemDetails.getDataEnvio());
-            mensagem.setConteudo(mensagemDetails.getConteudo());
-            return ResponseEntity.ok(mensagemRepositorio.save(mensagem));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Excluir uma mensagem pelo ID")
-    @ApiResponse(responseCode = "204", description = "Mensagem excluída com sucesso")
-    @ApiResponse(responseCode = "404", description = "Mensagem não encontrada")
-    public ResponseEntity<Void> deleteMensagem(@Parameter(description = "ID da mensagem") @PathVariable Long id) {
-        Optional<Mensagem> mensagemOptional = mensagemRepositorio.findById(id);
-
-        if (mensagemOptional.isPresent()) {
-            mensagemRepositorio.delete(mensagemOptional.get());
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public List<Mensagem> getMensagensByUsuarioId(@PathVariable Long usuarioId) {
+        return mensagemService.getMensagensByUsuarioId(usuarioId);
     }
 }

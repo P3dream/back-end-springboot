@@ -11,12 +11,5 @@ public class HelloWorld {
 	@GetMapping
 	public String olaMundo() {
 		return "Ola mundo";
-	}
-	
-	@GetMapping("/teste")
-	public String teste() {
-		return "Ola 121212";
-	}
-	
-	
+	}	
 }

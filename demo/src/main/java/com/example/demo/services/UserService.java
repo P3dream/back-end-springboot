@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +33,10 @@ public class UserService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return repositorio.findByLogin(username);
 	}
+	
+	public Optional<Usuario> findUserById(Long id) {
+        return repositorio.findById(id);
+    }
 
 	public Usuario cadastrarUsuario(DadosCadastro dados) {
 		Usuario usuarioEncontrado = repositorio.findByLogin(dados.login());

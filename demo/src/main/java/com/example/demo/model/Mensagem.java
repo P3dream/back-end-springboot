@@ -14,15 +14,13 @@ public class Mensagem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "emissor", nullable = false)
-    private Usuario emissor;
+    @Column(name = "emissor", nullable = false)
+    private long emissor;
 
-    @ManyToOne
-    @JoinColumn(name = "destinatario", nullable = false)
-    private Usuario destinatario;
+    @Column(name = "destinatario", nullable = false)
+    private long destinatario;
 
-    @Column(name = "dataenvio",nullable = false)
+    @Column(name = "dataenvio", nullable = false)
     private LocalDateTime dataEnvio;
 
     @Column(nullable = false, length = 255)

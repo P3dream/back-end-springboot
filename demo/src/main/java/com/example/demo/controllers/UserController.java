@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.model.DadosAlterarUserStatus;
 import com.example.demo.model.DadosCadastro;
-import com.example.demo.model.DadosLogin;
 import com.example.demo.model.DadosMudarSenha;
 import com.example.demo.model.DadosTokenJWT;
 import com.example.demo.model.Usuario;
