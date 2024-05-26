@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record DadosTokenJWT(
-	@NotBlank String token,
-	@NotBlank long id
+public record AlterarUserStatusDto (
+	@NotBlank Long id,
+	@NotBlank boolean isonline
 ) {}

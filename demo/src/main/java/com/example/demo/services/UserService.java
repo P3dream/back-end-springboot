@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.DadosAlterarUserStatus;
-import com.example.demo.model.DadosCadastro;
-import com.example.demo.model.DadosMudarSenha;
+import com.example.demo.model.AlterarUserStatusDto;
+import com.example.demo.model.CadastroDto;
+import com.example.demo.model.MudarSenhaDto;
 import com.example.demo.model.Usuario;
 import com.example.demo.repositorio.UsuarioRepositorio;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService {
         return repositorio.findById(id);
     }
 
-	public Usuario cadastrarUsuario(DadosCadastro dados) {
+	public Usuario cadastrarUsuario(CadastroDto dados) {
 		Usuario usuarioEncontrado = repositorio.findByLogin(dados.login());
         if (usuarioEncontrado != null) {
         	throw new ResponseStatusException(HttpStatus.CONFLICT, "Nome de usuário já está em uso.");
@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
 		return repositorio.save(usuario);
 	}	
 	
-	public Usuario mudarUserStatus(DadosAlterarUserStatus dto) {
+	public Usuario mudarUserStatus(AlterarUserStatusDto dto) {
         Usuario usuario = repositorio.findById(dto.id())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         usuario.setIsonline(dto.isonline());
@@ -70,7 +70,7 @@ public class UserService implements UserDetailsService {
         repositorio.save(usuario);
     }
 	
-	public Usuario mudarSenha(DadosMudarSenha dto) {
+	public Usuario mudarSenha(MudarSenhaDto dto) {
 		UserDetails userDetails = loadUserByUsername(dto.login());
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, dto.senha(), userDetails.getAuthorities());
         if (!authentication.isAuthenticated()) {

@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.model.CadastroMensagem;
+import com.example.demo.model.CriarMensagemDto;
 import com.example.demo.model.Mensagem;
 import com.example.demo.model.Usuario;
 import com.example.demo.repositorio.MensagemRepositorio;
@@ -25,23 +25,24 @@ public class MensagemService {
         return mensagemRepositorio.findAll();
     }    
     
-    public Mensagem createMensagem(CadastroMensagem mensagem) {
+    public Mensagem createMensagem(CriarMensagemDto mensagem) {
         Usuario emissor = userService.findUserById(mensagem.emissorId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Emissor não encontrado"));
-
-        Usuario destinatario = userService.findUserById(mensagem.destinatarioId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destinatário não encontrado"));
-
+        
+        if(mensagem.destinatarioId()!=-1) {
+	        userService.findUserById(mensagem.destinatarioId())
+	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destinatário não encontrado"));
+        }
         Mensagem dbMensagem = new Mensagem();
         dbMensagem.setEmissor(emissor.getId());
-        dbMensagem.setDestinatario(destinatario.getId());
+        dbMensagem.setDestinatario(mensagem.destinatarioId());
         dbMensagem.setConteudo(mensagem.conteudo());
         dbMensagem.setDataEnvio(LocalDateTime.now());
         return mensagemRepositorio.save(dbMensagem);
     }
     
     public List<Mensagem> getMensagensByUsuarioId(Long usuarioId) {
-        return mensagemRepositorio.findByEmissorOrDestinatario(usuarioId, usuarioId);
+        return mensagemRepositorio.findUserMessages(usuarioId);
     }
     
 }

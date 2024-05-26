@@ -10,10 +10,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.model.DadosAlterarUserStatus;
-import com.example.demo.model.DadosCadastro;
-import com.example.demo.model.DadosMudarSenha;
+import com.example.demo.model.AlterarUserStatusDto;
+import com.example.demo.model.CadastroDto;
 import com.example.demo.model.DadosTokenJWT;
+import com.example.demo.model.MudarSenhaDto;
 import com.example.demo.model.Usuario;
 import com.example.demo.services.TokenService;
 import com.example.demo.services.UserService;
@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "Efetua login e retorna o token JWT")
-    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid DadosCadastro dados) {
+    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid CadastroDto dados) {
         try {
             var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
             var autenticacao = manager.authenticate(token);
@@ -56,14 +56,14 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "Cadastra um novo usuário")
-    public ResponseEntity<?> cadastrarUsuario(@RequestBody @Valid DadosCadastro dados) {
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody @Valid CadastroDto dados) {
         Usuario novoUsuario = userService.cadastrarUsuario(dados);
         return ResponseEntity.ok(novoUsuario);
     }
 
     @PostMapping("/update")
     @Operation(summary = "Muda a senha de um usuário")
-    public ResponseEntity<String> mudarSenha(@RequestBody DadosMudarSenha dados) {
+    public ResponseEntity<String> mudarSenha(@RequestBody MudarSenhaDto dados) {
         try {
             userService.mudarSenha(dados);
             return ResponseEntity.ok("Senha alterada com sucesso");
@@ -76,7 +76,7 @@ public class UserController {
 
     @PatchMapping("/status")
     @Operation(summary = "Muda o status do usuário")
-    public ResponseEntity<?> cadastrarUsuario(DadosAlterarUserStatus dto) {
+    public ResponseEntity<?> cadastrarUsuario(AlterarUserStatusDto dto) {
         Usuario novoUsuario = userService.mudarUserStatus(dto);
         return ResponseEntity.ok(novoUsuario);
     }

@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.model.CadastroMensagem;
+import com.example.demo.model.CriarMensagemDto;
 import com.example.demo.model.Mensagem;
 import com.example.demo.services.MensagemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class MensagemController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = Mensagem.class)),
             @Content(mediaType = "application/xml", schema = @Schema(implementation = Mensagem.class))
     })
-    public Mensagem createMensagem(@RequestBody CadastroMensagem dto) {
+    public Mensagem createMensagem(@RequestBody CriarMensagemDto dto) {
         return mensagemService.createMensagem(dto);
     }
     
