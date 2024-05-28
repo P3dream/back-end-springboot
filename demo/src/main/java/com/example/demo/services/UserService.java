@@ -57,7 +57,7 @@ public class UserService implements UserDetailsService {
 	public Usuario mudarUserStatus(AlterarUserStatusDto dto) {
         Usuario usuario = repositorio.findById(dto.id())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        usuario.setIsonline(dto.isonline());
+        usuario.setIsonline(dto.isOnline());
         return repositorio.save(usuario);
     }
 	

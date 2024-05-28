@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.model.CriarMensagemDto;
 import com.example.demo.model.Mensagem;
+import com.example.demo.model.MensagemComUsuariosDTO;
 import com.example.demo.model.Usuario;
 import com.example.demo.repositorio.MensagemRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class MensagemService {
         return mensagemRepositorio.save(dbMensagem);
     }
     
-    public List<Mensagem> getMensagensByUsuarioId(Long usuarioId) {
+    public List<MensagemComUsuariosDTO> getMensagensByUsuarioId(Long usuarioId) {
         return mensagemRepositorio.findUserMessages(usuarioId);
     }
     

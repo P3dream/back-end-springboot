@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.AlterarUserStatusDto;
 import com.example.demo.model.CadastroDto;
 import com.example.demo.model.DadosTokenJWT;
+import com.example.demo.model.LoginDto;
 import com.example.demo.model.MudarSenhaDto;
 import com.example.demo.model.Usuario;
 import com.example.demo.services.TokenService;
@@ -23,7 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/user")
 @Tag(name = "Usuario e Autenticação", description = "Endpoints relacionadas à autenticação e usuário.")
 public class UserController {
 
@@ -38,17 +39,17 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "Efetua login e retorna o token JWT")
-    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid CadastroDto dados) {
+    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid LoginDto dados) {
         try {
             var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
             var autenticacao = manager.authenticate(token);
 
             var usuario = (Usuario) autenticacao.getPrincipal();
-            var tokenJWT = tokenService.gerarToken(usuario);
+            var tokenJWT = tokenService.gerarToken(usuario);	
 
             userService.setUserOnline(dados.login());
 
-            return ResponseEntity.ok(new DadosTokenJWT(tokenJWT, usuario.getId()));
+            return ResponseEntity.ok(new DadosTokenJWT(tokenJWT, usuario.getId(), usuario.getLogin()));
         } catch (Exception e) {
             return ResponseEntity.status(401).body("Credenciais inválidas");
         }
@@ -61,7 +62,7 @@ public class UserController {
         return ResponseEntity.ok(novoUsuario);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @Operation(summary = "Muda a senha de um usuário")
     public ResponseEntity<String> mudarSenha(@RequestBody MudarSenhaDto dados) {
         try {
@@ -74,9 +75,9 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/status")
+    @PutMapping("/status")
     @Operation(summary = "Muda o status do usuário")
-    public ResponseEntity<?> cadastrarUsuario(AlterarUserStatusDto dto) {
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody AlterarUserStatusDto dto) {
         Usuario novoUsuario = userService.mudarUserStatus(dto);
         return ResponseEntity.ok(novoUsuario);
     }

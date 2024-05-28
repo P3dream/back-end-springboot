@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.model.CriarMensagemDto;
 import com.example.demo.model.Mensagem;
+import com.example.demo.model.MensagemComUsuariosDTO;
 import com.example.demo.services.MensagemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class MensagemController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = Mensagem.class)),
             @Content(mediaType = "application/xml", schema = @Schema(implementation = Mensagem.class))
     })
-    public List<Mensagem> getMensagensByUsuarioId(@PathVariable Long usuarioId) {
+    public List<MensagemComUsuariosDTO> getMensagensByUsuarioId(@PathVariable Long usuarioId) {
         return mensagemService.getMensagensByUsuarioId(usuarioId);
     }
 }
