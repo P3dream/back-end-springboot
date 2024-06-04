@@ -34,6 +34,7 @@ public class MensagemService {
 	        userService.findUserById(mensagem.destinatarioId())
 	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destinatário não encontrado"));
         }
+        
         Mensagem dbMensagem = new Mensagem();
         dbMensagem.setEmissor(emissor.getId());
         dbMensagem.setDestinatario(mensagem.destinatarioId());
